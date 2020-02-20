@@ -25,6 +25,16 @@ python scripts/convert_tf_checkpoint_to_pytorch.py \
     --bert_config_file $pretrain_dir/uncased_L-12_H-768_A-12/config.json \
     --pytorch_dump_path $pretrain_dir/uncased_L-12_H-768_A-12/pytorch_model.bin
 
+wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-24_H-1024_A-16.zip
+unzip uncased_L-24_H-1024_A-16.zip -d $pretrain_dir
+mv $pretrain_dir/uncased_L-24_H-1024_A-16/bert_config.json $pretrain_dir/uncased_L-24_H-1024_A-16/config.json
+
+
+python scripts/convert_tf_checkpoint_to_pytorch.py \
+    --tf_checkpoint_path $pretrain_dir/uncased_L-24_H-1024_A-16/bert_model.ckpt \
+    --bert_config_file $pretrain_dir/uncased_L-24_H-1024_A-16/config.json \
+    --pytorch_dump_path $pretrain_dir/uncased_L-24_H-1024_A-16/pytorch_model.bin
+
 <<men
 # count relations
 python scripts/produce_relation_semeval.py \
