@@ -126,11 +126,11 @@ def convert_examples_to_features(examples, label_list, max_seq_length,
             logger.info("Writing example %d of %d" % (ex_index, len(examples)))
 
         token_example = tokenize_example_text(example, tokenizer)
-        token_text = token_example.text
+        tokens = token_example.text
 
         # Account for [CLS] and [SEP] with "- 2"
-        if len(token_text) > max_seq_length - 2:
-            token_text = token_text[:(max_seq_length - 2)]
+        if len(tokens) > max_seq_length - 2:
+            tokens = tokens[:(max_seq_length - 2)]
 
         # The convention in BERT is:
         # (a) For sequence pairs:
@@ -150,7 +150,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length,
         # For classification tasks, the first vector (corresponding to [CLS]) is
         # used as as the "sentence vector". Note that this only makes sense because
         # the entire model is fine-tuned.
-        tokens = token_text + [sep_token]
+        tokens = tokens + [sep_token]
         if sep_token_extra:
             # roberta uses an extra separator b/w pairs of sentences
             tokens += [sep_token]
