@@ -45,12 +45,12 @@ MODEL_CLASSES = {
 }
 
 
-def set_seed(args):
-    random.seed(args.seed)
-    np.random.seed(args.seed)
-    torch.manual_seed(args.seed)
+def set_seed(args, add_param=0):
+    random.seed(args.seed + add_param)
+    np.random.seed(args.seed + add_param)
+    torch.manual_seed(args.seed + add_param)
     if args.n_gpu > 0:
-        torch.cuda.manual_seed_all(args.seed)
+        torch.cuda.manual_seed_all(args.seed + add_param)
 
 
 def train(args, train_dataset, model, dev_dataset):
@@ -110,7 +110,9 @@ def train(args, train_dataset, model, dev_dataset):
     model.zero_grad()
     train_iterator = trange(int(args.num_train_epochs), desc="Epoch", disable=args.local_rank not in [-1, 0])
     set_seed(args)  # Added here for reproductibility (even between python 2 and 3)
-    for _ in train_iterator:
+    for epoch in train_iterator:
+        set_seed(args, epoch + 10)  # Added here for reproductibility (even between python 2 and 3)
+        # logger.info("  seed = %d", torch.initial_seed())
         epoch_iterator = tqdm(train_dataloader, desc="Iteration", disable=args.local_rank not in [-1, 0])
         for step, batch in enumerate(epoch_iterator):
             model.train()
@@ -152,6 +154,7 @@ def train(args, train_dataset, model, dev_dataset):
                         results, eval_loss = evaluate(args, model, dev_dataset)
                         for key, value in results.items():
                             tb_writer.add_scalar('eval_{}'.format(key), value, global_step)
+                    logger.info(" global step = %d", global_step)
                     tb_writer.add_scalar('lr', scheduler.get_lr()[0], global_step)
                     tb_writer.add_scalar('loss', (tr_loss - logging_loss) / args.logging_steps, global_step)
                     logging_loss = tr_loss

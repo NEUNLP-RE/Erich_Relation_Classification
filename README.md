@@ -12,15 +12,10 @@
 ## Dependencies
 
 - perl (For evaluating official f1 score)
-
 - python>=3.6
-
 - torch==1.1.0
-
 - pytorch-transformers==1.1.0
-
 - tensorboardX
-
 - tensorflow-gpu/tensorflow==1.15.2
 
 
@@ -38,8 +33,8 @@ $ bash train.sh
 ```bash
 $ bash test.sh
 # single GPU 2080Ti
-# bert base model: macro-averaged F1 = 88.74%
-# bert big model(fp16): macro-averaged F1 = 90.2%(not submitted in paper)
+# bert base en_uncased model: macro-averaged F1 = 88.86%
+# bert big en_uncased model(fp16): macro-averaged F1 = 90.2%(not submitted in paper)
 ```
 
 - Evaluate based on the official evaluation perl script.
