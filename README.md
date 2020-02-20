@@ -21,7 +21,7 @@
 
 - tensorboardX
 
-- tensorflow-gpu/tensorflow==1.15.0
+- tensorflow-gpu/tensorflow==1.15.2
 
 
 ## How to run
