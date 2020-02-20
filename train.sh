@@ -1,11 +1,11 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=5
+export CUDA_VISIBLE_DEVICES=-1
 
 code_dir=./src
 dataset=./dataset/semeval
 save_dir=./checkpoints/semeval
-pretrain_dir=./pretrain_model/uncased_L-24_H-1024_A-16/
+pretrain_dir=./pretrain_model/uncased_L-12_H-768_A-12/
 result_file=./dataset/semeval/eval_result.txt
 
 python $code_dir/main.py \
@@ -25,6 +25,4 @@ python $code_dir/main.py \
     --output_dir $save_dir \
     --logging_steps -1 \
     --save_steps -1 \
-    --result_file $result_file \
-    --fp16
-
+    --result_file $result_file
