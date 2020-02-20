@@ -33,9 +33,9 @@ $ bash train.sh
 ```bash
 $ bash test.sh
 # single GPU 2080Ti
-# bert base en_uncased model: macro-averaged F1 = 88.86%
-# bert big en_uncased model(fp16): macro-averaged F1 = 90.2%(not submitted in paper)
+# bert base en_uncased model: macro-averaged F1 = 89.16%
+# bert big en_uncased model(fp16): macro-averaged F1 = 89.63%(not submitted in paper)
 ```
-
+- if you want to use fp16, you need [apex](https://github.com/NVIDIA/apex)(GCC4.9) and [torch](https://download.pytorch.org/whl/cu100/torch_stable.html)(cuda10)
 - Evaluate based on the official evaluation perl script.
   - MACRO-averaged f1 score (except `Other` relation)
