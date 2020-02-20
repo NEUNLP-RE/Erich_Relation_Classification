@@ -84,6 +84,9 @@ class SemevalProcessor(object):
 def tokenize_example_text(sample, tokenizer):
     words = sample.text.split()
     e1_p, e2_p = sample.e1_pos, sample.e2_pos
+    # text_spans = [" ".join(words[:e1_p[0]] + ["<e1>"]), " ".join(words[e1_p[0]:e1_p[1] + 1]),
+    #               " ".join(["</e1>"] + words[e1_p[1] + 1:e2_p[0]] + ["<e2>"]),
+    #               " ".join(words[e2_p[0]:e2_p[1] + 1]), " ".join(["</e2>"] + words[e2_p[1] + 1:])]
     text_spans = [" ".join(words[:e1_p[0]] + ["$"]), " ".join(words[e1_p[0]:e1_p[1] + 1]),
                   " ".join(["$"] + words[e1_p[1] + 1:e2_p[0]] + ["#"]),
                   " ".join(words[e2_p[0]:e2_p[1] + 1]), " ".join(["#"] + words[e2_p[1] + 1:])]

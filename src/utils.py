@@ -10,7 +10,7 @@ def simple_accuracy(preds, labels):
 def semeval_score():
     output = os.popen('./test.sh')
     text = [i for i in output.read().split("\n") if i != ""]
-    score = text[-3]
+    score = text[-2]
     words = score.split()
     prec, recall, f1 = float(words[2][:-1]), float(words[5][:-1]), float(words[8][:-1])
     return {"precision": prec, "recall": recall, "f1 score": f1}
