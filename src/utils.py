@@ -8,7 +8,7 @@ def simple_accuracy(preds, labels):
 
 
 def semeval_score():
-    output = os.popen('./test.sh')
+    output = os.popen('bash test.sh')
     text = [i for i in output.read().split("\n") if i != ""]
     score = text[-2]
     words = score.split()

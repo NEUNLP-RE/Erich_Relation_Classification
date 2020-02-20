@@ -13,6 +13,8 @@ if [ ! -d $pretrain_dir ]; then
     mkdir -p $pretrain_dir
 fi
 
+chmod +x scripts/semeval2010_task8_scorer-v1.2.pl
+
 wget https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
 unzip uncased_L-12_H-768_A-12.zip -d $pretrain_dir
 mv $pretrain_dir/uncased_L-12_H-768_A-12/bert_config.json $pretrain_dir/uncased_L-12_H-768_A-12/config.json
