@@ -4,9 +4,10 @@ export CUDA_VISIBLE_DEVICES=0
 
 code_dir=./src
 dataset=./dataset/semeval
-save_dir=./checkpoints/semeval
+save_dir=./checkpoints/semeval_big
 pretrain_dir=./pretrain_model/uncased_L-24_H-1024_A-16/
 result_file=./dataset/semeval/eval_result.txt
+tensorboard_dir=./runs/semeval_big
 
 
 python $code_dir/main.py \
@@ -27,4 +28,5 @@ python $code_dir/main.py \
     --logging_steps -1 \
     --save_steps -1 \
     --result_file $result_file \
+    --tensorboard_dir $tensorboard_dir \
     --fp16

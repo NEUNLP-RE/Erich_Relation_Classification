@@ -4,9 +4,10 @@ export CUDA_VISIBLE_DEVICES=0
 
 code_dir=./src
 dataset=./dataset/semeval
-save_dir=./checkpoints/semeval
+save_dir=./checkpoints/semeval_base
 pretrain_dir=./pretrain_model/uncased_L-12_H-768_A-12/
 result_file=./dataset/semeval/eval_result.txt
+tensorboard_dir=./runs/semeval_base
 
 python $code_dir/main.py \
     --model_type eirc \
@@ -23,6 +24,7 @@ python $code_dir/main.py \
     --learning_rate 2e-5 \
     --num_train_epochs 5.0 \
     --output_dir $save_dir \
-    --logging_steps -1 \
+    --logging_steps 50 \
     --save_steps -1 \
-    --result_file $result_file
+    --result_file $result_file \
+    --tensorboard_dir $tensorboard_dir
