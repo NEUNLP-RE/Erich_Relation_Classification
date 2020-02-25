@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=3
 
 code_dir=./src
 dataset=./dataset/semeval
@@ -24,7 +24,7 @@ python $code_dir/main.py \
     --learning_rate 2e-5 \
     --num_train_epochs 5.0 \
     --output_dir $save_dir \
-    --logging_steps 50 \
+    --logging_steps -1 \
     --save_steps -1 \
     --result_file $result_file \
     --tensorboard_dir $tensorboard_dir

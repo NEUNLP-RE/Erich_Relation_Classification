@@ -1,6 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+import torch
+import random
+import numpy as np
 
 
 def simple_accuracy(preds, labels):
@@ -22,3 +25,11 @@ def compute_metrics(args, preds, labels):
         return semeval_score()
     else:
         raise KeyError(args.task_name)
+
+
+def set_seed(args, add_param=0):
+    random.seed(args.seed + add_param)
+    np.random.seed(args.seed + add_param)
+    torch.manual_seed(args.seed + add_param)
+    if args.n_gpu > 0:
+        torch.cuda.manual_seed_all(args.seed + add_param)
