@@ -35,6 +35,7 @@ $ bash test.sh
 # single GPU 2080Ti
 # bert base en_uncased model: macro-averaged F1 = 89.16%
 # bert big en_uncased model(fp16): macro-averaged F1 = 89.63%(not submitted in paper)
+# bert big en_uncased(Whole Word Masking)(fp16): macro-averaged F1 = 89.8%(not submitted in paper)
 ```
 - if you want to use fp16, you need [apex](https://github.com/NVIDIA/apex)(GCC4.9) and [torch](https://download.pytorch.org/whl/cu100/torch_stable.html)(cuda10)
 - Evaluate based on the official evaluation perl script.
