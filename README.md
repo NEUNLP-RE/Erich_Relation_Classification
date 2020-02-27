@@ -17,6 +17,7 @@
 - pytorch-transformers==1.1.0
 - tensorboardX
 - tensorflow-gpu/tensorflow==1.15.2
+- scikit-learn
 
 
 ## How to run
