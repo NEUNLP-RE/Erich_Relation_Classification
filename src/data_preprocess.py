@@ -81,15 +81,65 @@ class SemevalProcessor(object):
         return examples
 
 
-def tokenize_example_text(sample, tokenizer):
-    words = sample.text.split()
+class FinancialProcessor(object):
+    """Processor for the Semeval data set."""
+
+    def get_examples(self, data_dir, mode):
+        """See base class."""
+        return self._create_examples(
+            self._read_data(os.path.join(data_dir, mode + ".txt")), mode)
+
+    def get_labels(self, data_dir):
+        """See base class."""
+        labels = []
+        with codecs.open(os.path.join(data_dir, "relation2id.txt"), "r", "utf-8") as fr:
+            for l in fr:
+                ids, rel = l.strip().split()
+                labels.append(ids)
+        return labels
+
+    @classmethod
+    def _read_data(cls, input_file):
+        """Reads a tab separated value file."""
+        with codecs.open(input_file, "r", encoding="utf-8") as f:
+            lines = []
+            for line in f:
+                lines.append(line)
+            return lines
+
+    def _create_examples(self, lines, set_type):
+        """Creates examples for the training and dev sets."""
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = "%s-%s" % (set_type, i)
+            tokens = line.split()
+            e1_pos = [int(i) for i in tokens[1:3]]
+            e2_pos = [int(i) for i in tokens[3:5]]
+            text = tokens[5]
+            label = tokens[0]
+            examples.append(
+                InputExample(guid=guid, e1_pos=e1_pos, e2_pos=e2_pos, text=text, label=label))
+        return examples
+
+
+def tokenize_example_text(sample, tokenizer, task="semeval"):
     e1_p, e2_p = sample.e1_pos, sample.e2_pos
-    # text_spans = [" ".join(words[:e1_p[0]] + ["<e1>"]), " ".join(words[e1_p[0]:e1_p[1] + 1]),
-    #               " ".join(["</e1>"] + words[e1_p[1] + 1:e2_p[0]] + ["<e2>"]),
-    #               " ".join(words[e2_p[0]:e2_p[1] + 1]), " ".join(["</e2>"] + words[e2_p[1] + 1:])]
-    text_spans = [" ".join(words[:e1_p[0]] + ["$"]), " ".join(words[e1_p[0]:e1_p[1] + 1]),
-                  " ".join(["$"] + words[e1_p[1] + 1:e2_p[0]] + ["#"]),
-                  " ".join(words[e2_p[0]:e2_p[1] + 1]), " ".join(["#"] + words[e2_p[1] + 1:])]
+    if task == "financial":
+        words = sample.text
+        text_spans = [words[:e1_p[0]] + " $ ", words[e1_p[0]:e1_p[1] + 1],
+                      " $ " + words[e1_p[1] + 1:e2_p[0]] + " # ",
+                      words[e2_p[0]:e2_p[1] + 1], " # " + words[e2_p[1] + 1:]]
+        # text_spans = [words[:e1_p[0]] + " <e1> ", words[e1_p[0]:e1_p[1] + 1],
+        #               " </e1> " + words[e1_p[1] + 1:e2_p[0]] + " <e2> ",
+        #               words[e2_p[0]:e2_p[1] + 1], " </e2> " + words[e2_p[1] + 1:]]
+    else:
+        words = sample.text.split()
+        # text_spans = [" ".join(words[:e1_p[0]] + ["<e1>"]), " ".join(words[e1_p[0]:e1_p[1] + 1]),
+        #               " ".join(["</e1>"] + words[e1_p[1] + 1:e2_p[0]] + ["<e2>"]),
+        #               " ".join(words[e2_p[0]:e2_p[1] + 1]), " ".join(["</e2>"] + words[e2_p[1] + 1:])]
+        text_spans = [" ".join(words[:e1_p[0]] + ["$"]), " ".join(words[e1_p[0]:e1_p[1] + 1]),
+                      " ".join(["$"] + words[e1_p[1] + 1:e2_p[0]] + ["#"]),
+                      " ".join(words[e2_p[0]:e2_p[1] + 1]), " ".join(["#"] + words[e2_p[1] + 1:])]
     text_spans = [tokenizer.tokenize(s) for s in text_spans]
     len_spans = [len(s) for s in text_spans]
     sample.text = sum(tuple(text_spans), [])
@@ -110,7 +160,8 @@ def convert_examples_to_features(examples, label_list, max_seq_length,
                                  pad_token_segment_id=0,
                                  sequence_a_segment_id=0,
                                  sequence_b_segment_id=1,
-                                 mask_padding_with_zero=True):
+                                 mask_padding_with_zero=True,
+                                 task_name="semeval"):
     """ Loads a data file into a list of `InputBatch`s
         `cls_token_at_end` define the location of the CLS token:
             - False (Default, BERT/XLM pattern): [CLS] + A + [SEP] + B + [SEP]
@@ -125,7 +176,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length,
         if ex_index % 10000 == 0:
             logger.info("Writing example %d of %d" % (ex_index, len(examples)))
 
-        token_example = tokenize_example_text(example, tokenizer)
+        token_example = tokenize_example_text(example, tokenizer, task=task_name)
         tokens = token_example.text
 
         # Account for [CLS] and [SEP] with "- 2"
@@ -217,8 +268,10 @@ def convert_examples_to_features(examples, label_list, max_seq_length,
 
 processors = {
     "semeval": SemevalProcessor,
+    "financial": FinancialProcessor,
 }
 
 output_modes = {
     "semeval": "classification",
+    "financial": "classification",
 }
